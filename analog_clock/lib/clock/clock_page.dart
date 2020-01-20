@@ -147,7 +147,6 @@ class ClockPainter extends CustomPainter {
       ..strokeWidth = 2 * scale
       ..color = spotColor;
     if (secondsOffset.length > 0) {
-      //print(secondsOffset.length);
       canvas.drawPoints(PointMode.points, secondsOffset, secondPPaint);
       List<Offset> currentSpot = new List(1);
       currentSpot[0] = secondsOffset[datetime.second];
@@ -190,7 +189,6 @@ class ClockPainter extends CustomPainter {
         canvas.rotate(angle);
       }
       canvas.restore();
-      //print(secondsOffset);
       final biggerPaint = Paint()
         ..strokeWidth = 5 * scale
         ..color = numberColor;
@@ -200,14 +198,33 @@ class ClockPainter extends CustomPainter {
     final hour = datetime.hour;
     final minute = datetime.minute;
     final second = datetime.second;
-
+    Offset hourHand1;
+    Offset hourHand2;
+    int overflowMinute = 90;
     // draw hour hand
-    Offset hourHand1 = Offset(
-        radius - cos(degToRad(360 / 12 * hour - 90)) * (radius * 0.2),
-        radius - sin(degToRad(360 / 12 * hour - 90)) * (radius * 0.2));
-    Offset hourHand2 = Offset(
-        radius + cos(degToRad(360 / 12 * hour - 90)) * (radius * 0.5),
-        radius + sin(degToRad(360 / 12 * hour - 90)) * (radius * 0.5));
+    if (minute < 15) {
+      overflowMinute = 90;
+    } else if (minute > 15 && minute < 30) {
+      overflowMinute = 80;
+    } else if (minute > 30 && minute < 40) {
+      overflowMinute = 75;
+    } else if (minute > 40 && minute < 50) {
+      overflowMinute = 70;
+    } else if (minute > 50 && minute < 60) {
+      overflowMinute = 65;
+    } else {
+      overflowMinute = 90;
+    }
+    hourHand1 = Offset(
+        radius -
+            cos(degToRad(360 / 12 * hour - overflowMinute)) * (radius * 0.2),
+        radius -
+            sin(degToRad(360 / 12 * hour - overflowMinute)) * (radius * 0.2));
+    hourHand2 = Offset(
+        radius +
+            cos(degToRad(360 / 12 * hour - overflowMinute)) * (radius * 0.5),
+        radius +
+            sin(degToRad(360 / 12 * hour - overflowMinute)) * (radius * 0.5));
     final hourPaint = Paint()
       ..color = handColor
       ..strokeWidth = 6 * scale;

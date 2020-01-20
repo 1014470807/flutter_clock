@@ -114,12 +114,10 @@ class MyController extends FlareControls {
   }
 
   void submitPassword() {
-    debugPrint("password:${_password}");
     if (_password == "onepunch") {
       play("success");
     } else {
       play("fail");
-      debugPrint("提交");
     }
   }
 }
